@@ -606,6 +606,18 @@ def _placeholder_sp_pr_metadata(elem: ET.Element) -> ET.Element | None:
     return None
 
 
+# Each slide allocates new shape ids from its own base so ids stay unique
+# across the deck. Per-slide uniqueness is all OOXML requires, but some
+# viewers (iOS/iPadOS Quick Look) cache shape geometry by id across slides and
+# draw a previous slide's shape in place of a same-id shape on the next one.
+_SLIDE_SHAPE_ID_STRIDE = 10000
+
+
+def _slide_shape_id_base(slide_num: int) -> int:
+    """Return the first new shape id for a slide (1 stays the spTree root)."""
+    return max(slide_num - 1, 0) * _SLIDE_SHAPE_ID_STRIDE + 2
+
+
 _TXBODY_UNCHANGED_ATTR = 'data-pptx-runtime-txbody-unchanged'
 _PREVIEW_UNCHANGED_ATTR = 'data-pptx-runtime-preview-unchanged'
 
@@ -2431,6 +2443,7 @@ def convert_svg_to_slide_shapes(
     root_opacity = get_element_opacity(root)
     ctx = ConvertContext(
         defs=defs,
+        id_counter=_slide_shape_id_base(slide_num),
         reserved_shape_ids=frozenset(source_shape_id_map.values()),
         source_shape_id_map=source_shape_id_map,
         slide_num=slide_num,
