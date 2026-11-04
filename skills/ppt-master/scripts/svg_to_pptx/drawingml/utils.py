@@ -71,6 +71,9 @@ EA_FONTS = {
     'Source Han Sans SC', 'Source Han Sans TC',
     'Source Han Serif SC', 'Source Han Serif TC',
     'Source Han Sans JP', 'Source Han Serif JP',
+    # Region-specific CN subsets (思源黑体 CN / 思源宋体 CN); no Windows
+    # fallback is mapped, so an explicit request reaches PowerPoint as named
+    'Source Han Sans CN', 'Source Han Serif CN',
     'WenQuanYi Micro Hei', 'WenQuanYi Zen Hei',
     'YouYuan', 'LiSu', 'HuaWenKaiTi',
     'Heiti TC', 'Kaiti TC', 'Songti SC', 'Songti TC',
